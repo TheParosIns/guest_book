@@ -5,17 +5,41 @@
  * Date: 5/7/19
  * Time: 2:00 PM
  */
+require_once (__DIR__.'/../../tools/Sanitaze.php');
+require_once (__DIR__.'/../../tools/RenderView.php');
+require_once (__DIR__.'/../../app/Entity/User.php');
+require_once (__DIR__.'/../../app/Repository/UserRepository.php');
 
-require_once (__DIR__ . '/BaseConfig.php');
 
-class CreateAccountController extends BaseConfig
+class CreateAccountController extends User
 {
 
     public function createUser()
     {
+        //make some input data validation
         $foundErrors = $this->validateDatas();
         if (count($foundErrors)> 0){
-            header("Location: create_account.php");
+            RenderView::render_php('create_account.php',array('foundErrors' => $foundErrors));
+        }
+        //check if user already exist
+        $userRepository = new UserRepository();
+        $checkIfUserExist =$userRepository->findOneByEmail(Sanitaze::sanitazeInput($_POST['email']));
+
+        if (count($checkIfUserExist) > 0){
+            $foundErrors[]=["error" => "This user already exist"];
+            RenderView::render_php('create_account.php',array('foundErrors' => $foundErrors));
+        }else{
+            $newUser = new User();
+            $newUser->setName(Sanitaze::sanitazeInput($_POST['name']));
+            $newUser->setSurname(Sanitaze::sanitazeInput($_POST['surname']));
+            $newUser->setEmail(Sanitaze::sanitazeInput($_POST['email']));
+            $newUser->setPassword(password_hash(Sanitaze::sanitazeInput($_POST['password']), PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]));
+            $newUser->setCreatedAt(date('Y-m-d H:i:s'));
+            if ($newUser->save($newUser) == null){
+                RenderView::render_php('login.php',array('msg' => "User inserted successfully"));
+            }else{
+                RenderView::render_php('create_account.php',array('foundErrors' => "Insert failed!"));
+            }
         }
 
     }
@@ -24,29 +48,27 @@ class CreateAccountController extends BaseConfig
     {
 
         $errors = [];
-        $name = BaseConfig::sanitazeRequestData($_POST["name"]);
-        $nameClean = filter_var($name, FILTER_SANITIZE_STRING);
+        $nameClean = filter_var($_POST["name"], FILTER_SANITIZE_STRING);
         if (strlen($nameClean) < 2) {
             $errors[] = ["field" => "name", "error" => "Name is too short."];
-        } elseif (!preg_match("/^[a-zA-Z'-]+$/", $nameClean)) {
-            $errors[] = ["field" => "name", "error" => "Name is not valid. Only characters are allowed."];
+        } elseif (!preg_match("/^[a-zA-Z ]*$/", $nameClean)) {
+            $errors[] = ["field" => "name", "error" => "Name is not valid. Only letters and white space allowed"];
         }
-        $surname = BaseConfig::sanitazeRequestData($_POST["surname"]);
-        $surnameClean = filter_var($surname, FILTER_SANITIZE_STRING);
+
+        $surnameClean = filter_var($_POST["surname"], FILTER_SANITIZE_STRING);
         if (strlen($surnameClean) < 2) {
             $errors[] = ["field" => "surname", "error" => "Surname is too short."];
         } elseif (!preg_match("/^[a-zA-Z'-]+$/", $surnameClean)) {
             $errors[] = ["field" => "surname", "error" => "Surname is not valid."];
         }
-        $emailClean = BaseConfig::sanitazeRequestData($_POST["email"]);
-        if (strlen($emailClean) < 2) {
+
+        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
+            $errors[] = ["field" => "email", "error" => "Invalid email format."];
+        }elseif (strlen($_POST["email"]) < 2) {
             $errors[] = ["field" => "email", "error" => "Email is required."];
-        } elseif (!filter_var($emailClean, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = ["field" => "email", "error" => "Email address is not in a valid format."];
         }
-        $password = BaseConfig::sanitazeRequestData($_POST["password"]);
-        $passwordClean = filter_var($password, FILTER_SANITIZE_STRING);
-        $passwordValidationErrors = self::validatePassword($passwordClean);
+        $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+        $passwordValidationErrors = $this->validatePassword($password);
         if (count($passwordValidationErrors) > 0) {
             $errors[] = ["field" => "password", "error" => implode(" ", $passwordValidationErrors)];
         }
@@ -54,18 +76,5 @@ class CreateAccountController extends BaseConfig
         return $errors;
     }
 
-    public function validatePassword($password)
-    {
-        $errors = [];
-        if (strlen($password) < 8) {
-            $errors[] = "The password is too short.A minimum of 8 characters is required.";
-        }
-        if (!preg_match("#[0-9]+#", $password)) {
-            $errors[] = "The password must include at least one number.";
-        }
-        if (!preg_match("#[a-zA-Z]+#", $password)) {
-            $errors[] = "The password  must include at least one letter.";
-        }
-        return $errors;
-    }
+
 }

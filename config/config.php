@@ -1,12 +1,13 @@
 <?php
 
+
 class Config{
 
-    protected static $database = "guest_book";
-    protected static $user = "phpmyadmin";
-    protected static $password = "root";
-    protected static $host = "localhost";
-    protected static $dialect = "mysql"
+    public static $database = "guest_book";
+    public static $user = "root";
+    public static $password = "root";
+    public static $host = "localhost";
+    public static $dialect = "mysql"
 ;
 }
 

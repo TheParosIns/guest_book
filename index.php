@@ -1,17 +1,21 @@
 <?php
 session_start();
+error_reporting(E_ALL | E_STRICT);
+date_default_timezone_set('Europe/Tirane');
 require('config/config.php');
 require('app/Controllers/CreateAccountController.php');
 require('app/Controllers/LoginController.php');
+require_once ('tools/RenderView.php');
 
 if (isset($_POST) & !empty($_POST)) {
     if (isset($_POST['form-create_account'])){
         $createAccount = new CreateAccountController();
         $createAccount->createUser();
     }if (isset($_POST['form-login'])){
-        $userLogged = LoginController::loginUser();
+        $userLogged = new LoginController();
+        $userLogged->loginUser();
     }
 //    header("Location: app/Controllers/Security.php");
 } else {
-    header("Location: login.html");
+    header("Location: /../app/Templates/login.php");
 }

@@ -6,7 +6,7 @@
  * Time: 4:10 PM
  */
 
-require_once(__DIR__ . '/../../config/config.php');
+require_once (__DIR__.'/../../config/config.php');
 
 class BaseConfig
 {
@@ -21,13 +21,6 @@ class BaseConfig
             echo $e->getMessage();
         }
 
-    }
-
-    public static function sanitazeRequestData($parameter)
-    {
-
-        $connect = self::connect();
-        return $connect->quote($parameter);
     }
 
 }
