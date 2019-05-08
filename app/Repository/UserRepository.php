@@ -41,17 +41,32 @@ class UserRepository
 
     }
 
-    public function updateUserPassword($newHashPassword){
-        try{
+    public function updateUserPassword($newHashPassword)
+    {
+        try {
             $pdo = BaseConfig::connect();
-            $id=$_SESSION['last_id_user'];
+            $id = $_SESSION['last_id_user'];
             // the main query
             $sql = "UPDATE users SET password= '$newHashPassword'WHERE id= '$id' ";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
-            $data = $stmt->fetchAll();
-            return $data;
-        }catch (PDOException $e){
+
+        } catch (PDOException $e) {
+            return ["error" => true, "msg" => "Update failed because " . $e->getMessage()];
+        }
+    }
+
+    public function updateLoginAttempts($email,$failedAttempts)
+    {
+        try {
+            $pdo = BaseConfig::connect();
+            // the main query
+            $failedAttempts=$failedAttempts+1;
+            $sql = "UPDATE users SET failed_attempts= $failedAttempts , latest_attempt = ".time()." WHERE email= '$email' ";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
             return ["error" => true, "msg" => "Update failed because " . $e->getMessage()];
         }
     }

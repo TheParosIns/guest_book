@@ -5,10 +5,12 @@
  * Date: 5/7/19
  * Time: 2:00 PM
  */
-require_once (__DIR__.'/../../tools/Sanitaze.php');
-require_once (__DIR__.'/../../tools/RenderView.php');
+
+
 require_once (__DIR__.'/../../app/Entity/User.php');
 require_once (__DIR__.'/../../app/Repository/UserRepository.php');
+require_once (__DIR__.'/../../tools/Sanitaze.php');
+require_once (__DIR__.'/../../tools/RenderView.php');
 
 
 class CreateAccountController extends User
@@ -33,12 +35,7 @@ class CreateAccountController extends User
             $newUser->setName(Sanitaze::sanitazeInput($_POST['name']));
             $newUser->setSurname(Sanitaze::sanitazeInput($_POST['surname']));
             $newUser->setEmail(Sanitaze::sanitazeInput($_POST['email']));
-            $options = [
-                'memory_cost' => Config::$PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
-                'time_cost' => Config::$PASSWORD_ARGON2_DEFAULT_TIME_COST,
-                'threads' => Config::$PASSWORD_ARGON2_DEFAULT_THREADS,
-            ];
-            $newUser->setPassword(password_hash(Sanitaze::sanitazeInput($_POST['password']), PASSWORD_ARGON2I, $options));
+            $newUser->setPassword(password_hash(Sanitaze::sanitazeInput($_POST['password']), PASSWORD_ARGON2I, Sanitaze::getHashOptions()));
             $newUser->setCreatedAt(date('Y-m-d H:i:s'));
             if ($newUser->save($newUser) == null){
                 RenderView::render_php('login.php',array('msg' => "User inserted successfully"));

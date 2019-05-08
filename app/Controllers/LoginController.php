@@ -6,7 +6,7 @@
  * Time: 2:00 PM
  */
 require_once(__DIR__ . '/../../app/Entity/User.php');
-require_once (__DIR__.'/../../tools/GenerateAToken.php');
+require_once(__DIR__ . '/../../tools/GenerateAToken.php');
 
 class LoginController extends User
 {
@@ -22,18 +22,22 @@ class LoginController extends User
         $user = new User();
         $checkIfUserExist = $user->findOneByEmail(Sanitaze::sanitazeInput($_POST['email']));
         if (count($checkIfUserExist) > 0 && $user->verifyPasswords($_POST["password"], $checkIfUserExist[0]['password'])) {
-            GenerateAToken::generateATokenSession($_POST['email'],$checkIfUserExist[0]['password']);
+            //$this->updateLoginAttempts($user[0]['email'], intval($user[0]['failed_attempts'])); @TODO beji vlerat zero per te dyja kolonat
+            GenerateAToken::generateATokenSession($_POST['email']);
             $_SESSION['user'] = $checkIfUserExist;
-          RenderView::render_php('home.php',[]);
+            unset($_SESSION["user"][0]["password"]);
+            unset($_SESSION["user"][0][4]);
+            RenderView::render_php('home.php', []);
+        } elseif (count($checkIfUserExist) > 0 && !$user->verifyPasswords($_POST["password"], $checkIfUserExist[0]['password'])) {
+            if ($response = $this->canNotStillMakeRequests($checkIfUserExist)){
+                $foundErrors[] = ["error" => "Wait ".$response." more seconds"];
+            }else{
+                $this->updateLoginAttempts($user[0]['email'], intval($user[0]['failed_attempts']));
+                $foundErrors[] = ["error" => "TRY AGAIN"];
+            }
+            RenderView::render_php('login.php', array('foundErrors' => $foundErrors));
+
         } else {
-            //limit rate request per IP
-            $IP =$_SERVER['REMOTE_ADDR'];
-            $max_attempt = 5;
-            $limit = 60;
-            var_dump($_SERVER['REMOTE_ADDR']);
-
-
-
             $foundErrors[] = ["error" => "Nope...We didn't find you!...Please check your credentials or if you do not have an account create one ;)"];
             RenderView::render_php('login.php', array('foundErrors' => $foundErrors));
         }

@@ -17,4 +17,12 @@ class Sanitaze
         $input = filter_var($input,FILTER_SANITIZE_STRING);
         return $input;
     }
+
+    public static function getHashOptions(){
+        return $options = [
+            'memory_cost' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+            'time_cost' => PASSWORD_ARGON2_DEFAULT_TIME_COST,
+            'threads' => PASSWORD_ARGON2_DEFAULT_THREADS,
+        ];
+    }
 }

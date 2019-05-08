@@ -7,7 +7,6 @@
  */
 require_once(__DIR__ . '/../Repository/UserRepository.php');
 require_once(__DIR__ . '/../../tools/Sanitaze.php');
-require_once(__DIR__ . '/../../config/config.php');
 
 class User extends UserRepository
 {
@@ -21,7 +20,12 @@ class User extends UserRepository
 
     protected $password;
 
+    protected $failedAttempts;
+
+    protected $latestAttempt;
+
     protected $createdAt;
+
 
     /**
      * @return mixed
@@ -106,6 +110,38 @@ class User extends UserRepository
     /**
      * @return mixed
      */
+    public function getFailedAttempts()
+    {
+        return $this->failedAttempts;
+    }
+
+    /**
+     * @param mixed $failedAttempts
+     */
+    public function setFailedAttempts($failedAttempts)
+    {
+        $this->failedAttempts = $failedAttempts;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLatestAttempt()
+    {
+        return $this->latestAttempt;
+    }
+
+    /**
+     * @param mixed $latestAttempt
+     */
+    public function setLatestAttempt($latestAttempt)
+    {
+        $this->latestAttempt = $latestAttempt;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -138,22 +174,29 @@ class User extends UserRepository
 
     public function verifyPasswords($password, $userPassword)
     {
-        $options = [
-            'memory_cost' => Config::$PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
-            'time_cost' => Config::$PASSWORD_ARGON2_DEFAULT_TIME_COST,
-            'threads' => Config::$PASSWORD_ARGON2_DEFAULT_THREADS,
-        ];
         //first we verify stored hash against plain-text password
         if (password_verify($password, $userPassword)) {
             // verify legacy password to new password_hash options
-            if (password_needs_rehash($userPassword, PASSWORD_ARGON2I, $options)) {
-                $newhash = password_hash($password, PASSWORD_ARGON2I, $options);
+            if (password_needs_rehash($userPassword, PASSWORD_ARGON2I, Sanitaze::getHashOptions())) {
+                $newhash = password_hash($password, PASSWORD_ARGON2I, Sanitaze::getHashOptions());
                 // store new hash in db.
                 $this->updateUserPassword($newhash);
             }
         }
-
         return password_verify($password, $userPassword) ? true : false;
     }
 
+    public function canNotStillMakeRequests($user)
+    {
+
+        $failed_attempts = (int)$user[0]['failed_attempts'];
+        $latest_attempt = (int)$user[0]['latest_attempt'];
+        $delay_in_seconds = pow(2, $failed_attempts); // that's 2 to the $failed_attempts power
+        $remaining_delay = time() - $latest_attempt - $delay_in_seconds;
+        if($remaining_delay > 0) {
+           return $remaining_delay;
+        }
+        return false;
+
+    }
 }

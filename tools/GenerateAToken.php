@@ -9,7 +9,8 @@
 class GenerateAToken
 {
 
-    public static function generateATokenSession($email,$password){
-       $_SESSION['token'] = base64_encode ($email.$password);
+    public static function generateATokenSession($email)
+    {
+        $_SESSION['token'] = password_hash(TOKEN_SALT.$email,PASSWORD_DEFAULT);
     }
 }
