@@ -33,7 +33,12 @@ class CreateAccountController extends User
             $newUser->setName(Sanitaze::sanitazeInput($_POST['name']));
             $newUser->setSurname(Sanitaze::sanitazeInput($_POST['surname']));
             $newUser->setEmail(Sanitaze::sanitazeInput($_POST['email']));
-            $newUser->setPassword(password_hash(Sanitaze::sanitazeInput($_POST['password']), PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]));
+            $options = [
+                'memory_cost' => Config::$PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+                'time_cost' => Config::$PASSWORD_ARGON2_DEFAULT_TIME_COST,
+                'threads' => Config::$PASSWORD_ARGON2_DEFAULT_THREADS,
+            ];
+            $newUser->setPassword(password_hash(Sanitaze::sanitazeInput($_POST['password']), PASSWORD_ARGON2I, $options));
             $newUser->setCreatedAt(date('Y-m-d H:i:s'));
             if ($newUser->save($newUser) == null){
                 RenderView::render_php('login.php',array('msg' => "User inserted successfully"));

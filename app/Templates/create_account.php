@@ -37,7 +37,7 @@
         }
     }
     ?>
-    <form class="form-signin" method="POST">
+    <form class="form-signin" method="POST" action="../../index.php">
         <h2 class="form-signin-heading">Create Acount</h2>
 
         <label for="inputName" class="sr-only">Name</label>
@@ -52,7 +52,7 @@
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-primary btn-block" name="form-create_account" type="submit">Register</button>
-        <a class="btn btn-lg btn-primary btn-block" href="login.php">Login</a>
+        <a class="btn btn-lg btn-primary btn-block" href="../../app/Templates/login.php">Login</a>
     </form>
 </div>
 </body>

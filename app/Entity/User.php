@@ -5,7 +5,9 @@
  * Date: 5/7/19
  * Time: 2:11 PM
  */
-require_once (__DIR__.'/../Repository/UserRepository.php');
+require_once(__DIR__ . '/../Repository/UserRepository.php');
+require_once(__DIR__ . '/../../tools/Sanitaze.php');
+require_once(__DIR__ . '/../../config/config.php');
 
 class User extends UserRepository
 {
@@ -118,7 +120,6 @@ class User extends UserRepository
     }
 
 
-
     public function validatePassword($password)
     {
         $errors = [];
@@ -134,9 +135,25 @@ class User extends UserRepository
         return $errors;
     }
 
-    public function verifyPasswords($password,$userPassword){
-        $hash=password_hash($userPassword, PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]);
-       return password_verify($password, $hash) ? true : false;
+
+    public function verifyPasswords($password, $userPassword)
+    {
+        $options = [
+            'memory_cost' => Config::$PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+            'time_cost' => Config::$PASSWORD_ARGON2_DEFAULT_TIME_COST,
+            'threads' => Config::$PASSWORD_ARGON2_DEFAULT_THREADS,
+        ];
+        //first we verify stored hash against plain-text password
+        if (password_verify($password, $userPassword)) {
+            // verify legacy password to new password_hash options
+            if (password_needs_rehash($userPassword, PASSWORD_ARGON2I, $options)) {
+                $newhash = password_hash($password, PASSWORD_ARGON2I, $options);
+                // store new hash in db.
+                $this->updateUserPassword($newhash);
+            }
+        }
+
+        return password_verify($password, $userPassword) ? true : false;
     }
 
 }

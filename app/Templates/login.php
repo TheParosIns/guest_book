@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 
     <link rel="stylesheet" href="../../styles.css">
-
+    <script src="https://code.jquery.com/jquery-3.1.1.js"
+            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -43,16 +44,16 @@
         }
     }
     ?>
-    <form class="form-signin" method="POST">
+    <form class="form-signin" method="POST" action="../../index.php">
         <h2 class="form-signin-heading">Please Login</h2>
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">@</span>
-            <input type="text" name="email" class="form-control" placeholder="Email" required>
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
         </div>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-primary btn-block" name="form-login" type="submit">Login</button>
-        <a class="btn btn-lg btn-primary btn-block" href="create_account.php">Create Account</a>
+        <a class="btn btn-lg btn-primary btn-block" href="../../app/Templates/create_account.php">Create Account</a>
     </form>
 </div>
 </body>
