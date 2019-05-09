@@ -56,18 +56,39 @@ class UserRepository
         }
     }
 
-    public function updateLoginAttempts($email,$failedAttempts)
+    public function updateLoginAttempts($email,$failedLogin,$failedAttempts)
     {
         try {
             $pdo = BaseConfig::connect();
             // the main query
-            $failedAttempts=$failedAttempts+1;
-            $sql = "UPDATE users SET failed_attempts= $failedAttempts , latest_attempt = ".time()." WHERE email= '$email' ";
-            $stmt = $pdo->prepare($sql);
+            $failedAttempts= $failedLogin ? $failedAttempts+1 : $failedAttempts;
+            $latestAttempt = $failedLogin  ? time() : null;
+            $params = [':failedAttempts' => $failedAttempts, ':latestAttempt' => $latestAttempt,':email' => $email];
+            $sql = "UPDATE users SET failed_attempts= :failedAttempts , latest_attempt = :latestAttempt WHERE email= :email ";
+            $sqlReady = $this->build_pdo_query($sql, $params);
+            $stmt = $pdo->prepare($sqlReady);
             $stmt->execute();
 
         } catch (PDOException $e) {
             return ["error" => true, "msg" => "Update failed because " . $e->getMessage()];
         }
+    }
+
+    function build_pdo_query($string, $array) {
+        //Get the key lengths for each of the array elements.
+        $keys = array_map('strlen', array_keys($array));
+
+        //Sort the array by string length so the longest strings are replaced first.
+        array_multisort($keys, SORT_DESC, $array);
+
+        foreach($array as $k => $v) {
+            //Quote non-numeric values.
+            $replacement = is_numeric($v) ? $v : "'{$v}'";
+
+            //Replace the needle.
+            $string = str_replace($k, $replacement, $string);
+        }
+
+        return $string;
     }
 }

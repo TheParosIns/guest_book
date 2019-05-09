@@ -11,6 +11,10 @@ require_once(__DIR__ . '/../../tools/GenerateAToken.php');
 class LoginController extends User
 {
 
+    public function showLoginForm(){
+        RenderView::render_php('login.php', array());
+    }
+
     public function loginUser()
     {
         //make some input datas validations
@@ -22,19 +26,26 @@ class LoginController extends User
         $user = new User();
         $checkIfUserExist = $user->findOneByEmail(Sanitaze::sanitazeInput($_POST['email']));
         if (count($checkIfUserExist) > 0 && $user->verifyPasswords($_POST["password"], $checkIfUserExist[0]['password'])) {
-            //$this->updateLoginAttempts($user[0]['email'], intval($user[0]['failed_attempts'])); @TODO beji vlerat zero per te dyja kolonat
+
+            $this->updateLoginAttempts($checkIfUserExist[0]['email'],false,0);
+
             GenerateAToken::generateATokenSession($_POST['email']);
             $_SESSION['user'] = $checkIfUserExist;
             unset($_SESSION["user"][0]["password"]);
             unset($_SESSION["user"][0][4]);
             RenderView::render_php('home.php', []);
         } elseif (count($checkIfUserExist) > 0 && !$user->verifyPasswords($_POST["password"], $checkIfUserExist[0]['password'])) {
-            if ($response = $this->canNotStillMakeRequests($checkIfUserExist)){
-                $foundErrors[] = ["error" => "Wait ".$response." more seconds"];
-            }else{
-                $this->updateLoginAttempts($user[0]['email'], intval($user[0]['failed_attempts']));
-                $foundErrors[] = ["error" => "TRY AGAIN"];
-            }
+
+
+            $this->updateLoginAttempts($checkIfUserExist[0]['email'], true,intval($checkIfUserExist[0]['failed_attempts']));
+            $response = $this->canNotStillMakeRequests($checkIfUserExist);
+            var_dump($response);
+//            if ($response = $this->canNotStillMakeRequests($checkIfUserExist)){
+//                $foundErrors[] = ["error" => "Wait ".$response." more seconds"];
+//            }else{
+//                $this->updateLoginAttempts($user[0]['email'], intval($user[0]['failed_attempts']));
+//                $foundErrors[] = ["error" => "TRY AGAIN"];
+//            }
             RenderView::render_php('login.php', array('foundErrors' => $foundErrors));
 
         } else {

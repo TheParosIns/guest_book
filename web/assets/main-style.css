@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower');
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower|Roboto+Mono');
+
+.label-guest{
+	    display: inline-block;
+    float: left;
+    color: #d68494;
+    font-weight: 100;
+    margin-right: 10px;
+    font-size: 21px;
+    padding: 15px;
+}
+.input-control-guest{
+	    border-bottom: 1px solid #f7d6aa;
+    border-top: 0;
+    display: inline-block;
+    float: left;
+    border-left: 0;
+    border-right: 0;
+    margin-top: 13px;
+    min-width: 250px;
+}
+.form-control-guest{
+	padding:50px 0;
+	min-height: 300px;
+}
+.bg-flower{
+	background: url(bg-flower.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    background-position: 50% 50%;
+    overflow: hidden;
+    height: 100vh;
+    padding: 27px 0;
+}
+.header-container-guest{
+	    color: #9f8f56;
+    text-transform: uppercase;
+}
+
+/*style of home*/
+/*.bg-home{
+	background: url(bg-home2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    background-position: 50% 50%;
+    overflow: hidden;
+    height: 100vh;
+    padding: 27px 0;
+}*/
+.header-home{
+       font-family: 'Indie Flower', cursive;
+    font-size: 82px;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 43px 0;
+    color: #b3aac2;
+}
+.paragraph-home{
+	font-size: 20px;
+    line-height: 35px;
+    font-family: 'Roboto Mono', monospace;
+    text-align: justify;
+    margin: 25px 0;
+}
+.label-name{
+       font-family: 'Indie Flower', cursive;
+    font-size: 65px;
+    text-align: right;
+    color: #f1a1bc;
+    -webkit-transform: rotate(-5deg);
+    -moz-transform: rotate(-90deg);
+    margin-top: 27px;
+}
+.date-event{
+    font-size: 21px;
+    text-transform: uppercase;
+    margin-top: 45px;
+    display: block;
+    text-align: right;
+    color: #969caa;
+    font-family: 'Roboto Mono', monospace;
+}
+.bg-footer-home{
+	    width: 49%;
+    -webkit-transform: rotate(-160deg);
+    -moz-transform: rotate(-160deg);
+    margin-top: 50px;
+}

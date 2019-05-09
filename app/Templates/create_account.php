@@ -10,7 +10,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 
-    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../assets/styles.css">
     <script src="https://code.jquery.com/jquery-3.1.1.js"
             integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
     <!-- Latest compiled and minified JavaScript -->
@@ -37,7 +37,7 @@
         }
     }
     ?>
-    <form class="form-signin" method="POST" action="../../index.php">
+    <form class="form-signin" method="POST" action="register/send">
         <h2 class="form-signin-heading">Create Acount</h2>
 
         <label for="inputName" class="sr-only">Name</label>
@@ -52,7 +52,7 @@
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-primary btn-block" name="form-create_account" type="submit">Register</button>
-        <a class="btn btn-lg btn-primary btn-block" href="../../app/Templates/login.php">Login</a>
+        <a class="btn btn-lg btn-primary btn-block" href="auth/login">Login</a>
     </form>
 </div>
 </body>

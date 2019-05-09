@@ -16,12 +16,21 @@ require_once (__DIR__.'/../../tools/RenderView.php');
 class CreateAccountController extends User
 {
 
+    public function showCreateAccount($foundErrors = [],$msg = ""){
+        RenderView::render_php('create_account.php',array('foundErrors' => $foundErrors,"msg" => $msg));
+    }
+
+    public function redirectTo($url){
+        header("Location: ".$url);
+        die();
+    }
+
     public function createUser()
     {
         //make some input data validation
         $foundErrors = $this->validateDatas();
         if (count($foundErrors)> 0){
-            RenderView::render_php('create_account.php',array('foundErrors' => $foundErrors));
+            $this->showCreateAccount($foundErrors);
         }
         //check if user already exist
         $userRepository = new UserRepository();
@@ -29,7 +38,7 @@ class CreateAccountController extends User
 
         if (count($checkIfUserExist) > 0){
             $foundErrors[]=["error" => "This user already exist"];
-            RenderView::render_php('create_account.php',array('foundErrors' => $foundErrors));
+            $this->redirectTo("auth/register");
         }else{
             $newUser = new User();
             $newUser->setName(Sanitaze::sanitazeInput($_POST['name']));
@@ -40,7 +49,7 @@ class CreateAccountController extends User
             if ($newUser->save($newUser) == null){
                 RenderView::render_php('login.php',array('msg' => "User inserted successfully"));
             }else{
-                RenderView::render_php('create_account.php',array('foundErrors' => "Insert failed!"));
+                $this->showCreateAccount(["error" => "Insert failed"]);
             }
         }
 
