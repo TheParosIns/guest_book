@@ -193,8 +193,11 @@ class User extends UserRepository
         $latest_attempt = (int)$user[0]['latest_attempt'];
         $delay_in_seconds = pow(2, $failed_attempts); // that's 2 to the $failed_attempts power
         $remaining_delay = time() - $latest_attempt - $delay_in_seconds;
-        var_dump($latest_attempt +$delay_in_seconds > time() );
-        return $remaining_delay;
-
+        if ($latest_attempt +$delay_in_seconds > time()){
+            $remain=$remaining_delay%86400;
+            $remain=$remain%3600;
+            $secs=$remain%60;
+            return ["error" => true, "msg" => "You should wait ".(int)$secs." to make another request"];
+        } return ["error" => false, "msg" => "Try again"];
     }
 }

@@ -33,24 +33,16 @@ class LoginController extends User
             $_SESSION['user'] = $checkIfUserExist;
             unset($_SESSION["user"][0]["password"]);
             unset($_SESSION["user"][0][4]);
-            Template::redirectTo('home.php');
+            Template::redirectTo('/');
         } elseif (count($checkIfUserExist) > 0 && !$user->verifyPasswords($_POST["password"], $checkIfUserExist[0]['password'])) {
-
 
             $this->updateLoginAttempts($checkIfUserExist[0]['email'], true,intval($checkIfUserExist[0]['failed_attempts']));
             $response = $this->canNotStillMakeRequests($checkIfUserExist);
-            var_dump($response);
-//            if ($response = $this->canNotStillMakeRequests($checkIfUserExist)){
-//                $foundErrors[] = ["error" => "Wait ".$response." more seconds"];
-//            }else{
-//                $this->updateLoginAttempts($user[0]['email'], intval($user[0]['failed_attempts']));
-//                $foundErrors[] = ["error" => "TRY AGAIN"];
-//            }
-            Template::render_php('login.php', array('foundErrors' => $foundErrors));
+
+            Template::redirectTo('/auth/login', $response['msg']);
 
         } else {
-            $foundErrors[] = ["error" => "Nope...We didn't find you!...Please check your credentials or if you do not have an account create one ;)"];
-            Template::render_php('login.php', array('foundErrors' => $foundErrors));
+            Template::redirectTo('/auth/login', "Nope...We didn't find you!...Please check your credentials or if you do not have an account create one ");
         }
     }
 

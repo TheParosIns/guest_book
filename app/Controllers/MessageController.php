@@ -11,6 +11,6 @@ class MessageController
 
     public function showHomePage()
     {
-        RenderView::render_php('home.php',array());
+        Template::render_php('home.php',array());
     }
 }

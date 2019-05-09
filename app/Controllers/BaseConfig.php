@@ -21,4 +21,23 @@ class BaseConfig
 
     }
 
+
+    public static function build_pdo_query($string, $array) {
+        //Get the key lengths for each of the array elements.
+        $keys = array_map('strlen', array_keys($array));
+
+        //Sort the array by string length so the longest strings are replaced first.
+        array_multisort($keys, SORT_DESC, $array);
+
+        foreach($array as $k => $v) {
+            //Quote non-numeric values.
+            $replacement = is_numeric($v) ? $v : "'{$v}'";
+
+            //Replace the needle.
+            $string = str_replace($k, $replacement, $string);
+        }
+
+        return $string;
+    }
+
 }

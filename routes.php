@@ -28,18 +28,64 @@ $idParameter = isset($uriExploded[4]) ? $uriExploded[4] : "";
 // guestBook/note/delete/{noteID} GET Delete note.
 // guestBook/reply/{noteID} POST Submit a new reply for a given note.
 
-
-if (strlen($module) > 0) {
+if (Session::isUserLogged()){
+    if (strlen($module) > 0) {
+      if ($module == "guestBook") {
+            if ($controller == "message") {
+                if ($action == "new") {
+                    echo "Show message creation form.";
+                }
+                elseif ($action == "create") {
+                    echo "Submit message creation form.";
+                }
+                elseif ($action == "edit") {
+                    idParameterExists();
+                    echo "Show message editing form.";
+                }
+                elseif ($action == "update") {
+                    idParameterExists();
+                    echo "Submit message editing form.";
+                }
+                elseif ($action == "view") {
+                    idParameterExists();
+                    echo "Show message and all it's replies.";
+                }
+                elseif ($action == "delete") {
+                    idParameterExists();
+                    echo "Delete message.";
+                }
+                else {
+                    returnErrorPage(404);
+                }
+            } elseif ($controller == "reply") {
+                if (idParameterExists()) {
+                    echo "Submit a new reply for a given message.";
+                } else {
+                    returnErrorPage(404);
+                }
+            } else {
+                $home = new MessageController();
+                $home->showHomePage();
+            }
+        } else {
+            returnErrorPage(404);
+        }
+    } else {
+        $home = new MessageController();
+        $home->showHomePage();
+    }
+}else{
     if ($module == "auth") {
         if ($controller == "register") {
             if ($action == "send") {
-               $register = new CreateAccountController();
-               $register->createAccount();
+                $register = new CreateAccountController();
+                $register->createAccount();
             } else {
                 $register = new CreateAccountController();
                 $register->showCreateAccountForm();
             }
-        } elseif ($controller == "login") {
+        }
+        if($controller == "login") {
             if ($action == "send") {
                 $login = new LoginController();
                 $login->loginUser();
@@ -47,53 +93,12 @@ if (strlen($module) > 0) {
                 $login = new LoginController();
                 $login->showLoginForm();
             }
-        } else {
-            $login = new LoginController();
-            $login->showLoginForm();
         }
-    } elseif ($module == "guestBook") {
-        if ($controller == "message") {
-            if ($action == "new") {
-                echo "Show message creation form.";
-            }
-            elseif ($action == "create") {
-                echo "Submit message creation form.";
-            }
-            elseif ($action == "edit") {
-                idParameterExists();
-                echo "Show message editing form.";
-            }
-            elseif ($action == "update") {
-                idParameterExists();
-                echo "Submit message editing form.";
-            }
-            elseif ($action == "view") {
-                idParameterExists();
-                echo "Show message and all it's replies.";
-            }
-            elseif ($action == "delete") {
-                idParameterExists();
-                echo "Delete message.";
-            }
-            else {
-                returnErrorPage(404);
-            }
-        } elseif ($controller == "reply") {
-            if (idParameterExists()) {
-                echo "Submit a new reply for a given message.";
-            } else {
-                returnErrorPage(404);
-            }
-        } else {
-            echo "Show a listing of all guest book messages.";
-        }
-    } else {
-        returnErrorPage(404);
+    }else{
+       Template::redirectTo("/auth/login");
     }
-} else {
-    $home = new MessageController();
-    $home->showHomePage();
 }
+
 
 
 function returnErrorPage($errorCode)
