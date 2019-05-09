@@ -10,35 +10,31 @@
 require_once (__DIR__.'/../../app/Entity/User.php');
 require_once (__DIR__.'/../../app/Repository/UserRepository.php');
 require_once (__DIR__.'/../../tools/Sanitaze.php');
-require_once (__DIR__.'/../../tools/RenderView.php');
+require_once (__DIR__ . '/../../tools/Template.php');
 
 
 class CreateAccountController extends User
 {
 
-    public function showCreateAccount($foundErrors = [],$msg = ""){
-        RenderView::render_php('create_account.php',array('foundErrors' => $foundErrors,"msg" => $msg));
+    public function showCreateAccountForm(){
+        Template::render_php('create_account.php');
     }
 
-    public function redirectTo($url){
-        header("Location: ".$url);
-        die();
-    }
 
-    public function createUser()
+    public function createAccount()
     {
         //make some input data validation
         $foundErrors = $this->validateDatas();
         if (count($foundErrors)> 0){
-            $this->showCreateAccount($foundErrors);
+            Template::render_php('create_account.php',array('foundErrors' => $foundErrors));
         }
         //check if user already exist
         $userRepository = new UserRepository();
         $checkIfUserExist =$userRepository->findOneByEmail(Sanitaze::sanitazeInput($_POST['email']));
 
         if (count($checkIfUserExist) > 0){
-            $foundErrors[]=["error" => "This user already exist"];
-            $this->redirectTo("auth/register");
+            $msg="This user already exist";
+            Template::redirectTo("/auth/register" ,$msg);
         }else{
             $newUser = new User();
             $newUser->setName(Sanitaze::sanitazeInput($_POST['name']));
@@ -47,11 +43,12 @@ class CreateAccountController extends User
             $newUser->setPassword(password_hash(Sanitaze::sanitazeInput($_POST['password']), PASSWORD_ARGON2I, Sanitaze::getHashOptions()));
             $newUser->setCreatedAt(date('Y-m-d H:i:s'));
             if ($newUser->save($newUser) == null){
-                RenderView::render_php('login.php',array('msg' => "User inserted successfully"));
+                Template::redirectTo("/auth/login","","Account created successfully");
             }else{
-                $this->showCreateAccount(["error" => "Insert failed"]);
+                Template::redirectTo("/auth/register","Something went wrong");
             }
         }
+        Template::redirectTo("/auth/register");
 
     }
 

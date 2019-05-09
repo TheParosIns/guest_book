@@ -6,7 +6,7 @@ date_default_timezone_set('Europe/Tirane');
 require('../app/Controllers/CreateAccountController.php');
 require('../app/Controllers/LoginController.php');
 require('../app/Controllers/MessageController.php');
-require_once('../tools/RenderView.php');
+require_once('../tools/Template.php');
 require_once(__DIR__ . '/../config/config.php');
 require_once(__DIR__ . '/../routes.php');
 

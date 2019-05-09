@@ -12,7 +12,7 @@ class LoginController extends User
 {
 
     public function showLoginForm(){
-        RenderView::render_php('login.php', array());
+        Template::render_php('login.php', array());
     }
 
     public function loginUser()
@@ -20,7 +20,7 @@ class LoginController extends User
         //make some input datas validations
         $foundErrors = $this->validateDatas();
         if (count($foundErrors) > 0) {
-            RenderView::render_php('login.php', array('foundErrors' => $foundErrors));
+            Template::render_php('login.php', array('foundErrors' => $foundErrors));
         }
         //check if user exist
         $user = new User();
@@ -33,7 +33,7 @@ class LoginController extends User
             $_SESSION['user'] = $checkIfUserExist;
             unset($_SESSION["user"][0]["password"]);
             unset($_SESSION["user"][0][4]);
-            RenderView::render_php('home.php', []);
+            Template::redirectTo('home.php');
         } elseif (count($checkIfUserExist) > 0 && !$user->verifyPasswords($_POST["password"], $checkIfUserExist[0]['password'])) {
 
 
@@ -46,11 +46,11 @@ class LoginController extends User
 //                $this->updateLoginAttempts($user[0]['email'], intval($user[0]['failed_attempts']));
 //                $foundErrors[] = ["error" => "TRY AGAIN"];
 //            }
-            RenderView::render_php('login.php', array('foundErrors' => $foundErrors));
+            Template::render_php('login.php', array('foundErrors' => $foundErrors));
 
         } else {
             $foundErrors[] = ["error" => "Nope...We didn't find you!...Please check your credentials or if you do not have an account create one ;)"];
-            RenderView::render_php('login.php', array('foundErrors' => $foundErrors));
+            Template::render_php('login.php', array('foundErrors' => $foundErrors));
         }
     }
 

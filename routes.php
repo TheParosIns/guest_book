@@ -34,14 +34,15 @@ if (strlen($module) > 0) {
         if ($controller == "register") {
             if ($action == "send") {
                $register = new CreateAccountController();
-               $register->createUser();
+               $register->createAccount();
             } else {
                 $register = new CreateAccountController();
-                $register->showCreateAccount();
+                $register->showCreateAccountForm();
             }
         } elseif ($controller == "login") {
             if ($action == "send") {
-                echo "Submit login form.";
+                $login = new LoginController();
+                $login->loginUser();
             } else {
                 $login = new LoginController();
                 $login->showLoginForm();
@@ -51,40 +52,40 @@ if (strlen($module) > 0) {
             $login->showLoginForm();
         }
     } elseif ($module == "guestBook") {
-        if ($controller == "note") {
+        if ($controller == "message") {
             if ($action == "new") {
-                echo "Show note creation form.";
+                echo "Show message creation form.";
             }
             elseif ($action == "create") {
-                echo "Submit note creation form.";
+                echo "Submit message creation form.";
             }
             elseif ($action == "edit") {
                 idParameterExists();
-                echo "Show note editing form.";
+                echo "Show message editing form.";
             }
             elseif ($action == "update") {
                 idParameterExists();
-                echo "Submit note editing form.";
+                echo "Submit message editing form.";
             }
             elseif ($action == "view") {
                 idParameterExists();
-                echo "Show note and all it's replies.";
+                echo "Show message and all it's replies.";
             }
             elseif ($action == "delete") {
                 idParameterExists();
-                echo "Delete note.";
+                echo "Delete message.";
             }
             else {
                 returnErrorPage(404);
             }
         } elseif ($controller == "reply") {
             if (idParameterExists()) {
-                echo "Submit a new reply for a given note.";
+                echo "Submit a new reply for a given message.";
             } else {
                 returnErrorPage(404);
             }
         } else {
-            echo "Show a listing of all guest book notes.";
+            echo "Show a listing of all guest book messages.";
         }
     } else {
         returnErrorPage(404);
