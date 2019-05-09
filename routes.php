@@ -15,8 +15,8 @@ $idParameter = isset($uriExploded[4]) ? $uriExploded[4] : "";
 
 //Routes
 // / GET  Show landing page.
-// auth/register GET   Show registration form.
-// auth/register/send POST  Submit registration form.
+// auth/create_account GET   Show registration form.
+// auth/create_account/send POST  Submit registration form.
 // auth/login GET Show login form.
 // auth/login/send POST Submit login form.
 // guestBook/ GET Show a listing of all guest book notes.
@@ -33,23 +33,31 @@ if (Session::isUserLogged()){
       if ($module == "guestBook") {
             if ($controller == "message") {
                 if ($action == "new") {
-                    echo "Show message creation form.";
+                    $message = new MessageController();
+                    $message->sendMessage();
                 }
                 elseif ($action == "create") {
-                    echo "Submit message creation form.";
+                    $message = new MessageController();
+                    $message->createMessageForm();
                 }
                 elseif ($action == "edit") {
                     idParameterExists();
-                    echo "Show message editing form.";
+                    $message = new MessageController();
+                    $message->editMessageForm($idParameter);
                 }
                 elseif ($action == "update") {
                     idParameterExists();
-                    echo "Submit message editing form.";
+                    $message = new MessageController();
+                    $message->updateMessage($idParameter);
                 }
                 elseif ($action == "view") {
-                    idParameterExists();
                     $message = new MessageController();
                     $message->showMessageList();
+                }
+                elseif ($action == "viewMessage") {
+                    idParameterExists();
+                    $message = new MessageController();
+                    $message->viewMessage($idParameter);
                 }
                 elseif ($action == "delete") {
                     idParameterExists();
@@ -68,7 +76,11 @@ if (Session::isUserLogged()){
                 $home = new MessageController();
                 $home->showHomePage();
             }
-        } else {
+        } elseif ($module == "logout"){
+          $logout= new LoginController();
+          $logout->logout();
+      }
+        else {
             returnErrorPage(404);
         }
     } else {
@@ -77,13 +89,13 @@ if (Session::isUserLogged()){
     }
 }else{
     if ($module == "auth") {
-        if ($controller == "register") {
+        if ($controller == "create_account") {
             if ($action == "send") {
-                $register = new CreateAccountController();
-                $register->createAccount();
+                $create_account = new CreateAccountController();
+                $create_account->createAccount();
             } else {
-                $register = new CreateAccountController();
-                $register->showCreateAccountForm();
+                $create_account = new CreateAccountController();
+                $create_account->showCreateAccountForm();
             }
         }
         if($controller == "login") {

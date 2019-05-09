@@ -20,9 +20,7 @@
 
     <link rel="stylesheet" href="../../assets/main-style.css">
 
-    <script src="https://code.jquery.com/jquery-3.1.1.js"
-
-            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
 
     <!-- Latest compiled and minified JavaScript -->
 
@@ -32,10 +30,11 @@
 
 <body>
 <div class="container bg-home">
+    <?php include('menu.php') ?>
     <div class="col-md-10" style="margin-left: 135px;">
         <h2 class="header-home">The Guest book</h2>
         <div class="row">
-            <p class="paragraph-home">Where so glad that you came and wed love for you to sign your name.Perhaps you were until a line or two,why which we can forever remember you.</p>
+            <p class="paragraph-home">We are so glad that you came and we'd love for you to sign your name.Perhaps you will write until a line or two,why which we can forever remember you.</p>
         </div>
         <div class="row">
             <p class="paragraph-home">After our wedding day has passed our memories will always last.For when we look we'll be sure to see loving words from our friends and family.</p>
@@ -47,11 +46,11 @@
             <p class="paragraph-home">After our wedding day has passed our memories will always last.For when we look we'll be sure to see loving words from our friends and family.</p>
         </div>
         <div class="row">
-            <img class="bg-footer-home" src="../../assets/bg-home.jpg" class="pull-left">
+            <img class="bg-footer-home pull-left" src="../../assets/bg-home.jpg">
             <div class="pull-right">
                 <h3 class="label-name">Lestie and Michael</h3>
                 <span class="date-event">August 4.2012</span>
-                <a href="<?php echo Template::redirectTo('/guestBook/message/new')?>" class="btn btn-primary btn-primary-radius">Leave a message for us!</a>
+                <a href="/guestBook/message/create" class="btn btn-primary btn-primary-radius">Leave a message for us!</a>
             </div>
         </div>
     </div>

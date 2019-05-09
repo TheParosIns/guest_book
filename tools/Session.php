@@ -12,4 +12,8 @@ class Session
     public static function isUserLogged(){
         return isset($_SESSION["user"]) && isset($_SESSION["token"]);
     }
+
+    public static function logout(){
+        session_destroy();
+    }
 }

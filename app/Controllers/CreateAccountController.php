@@ -34,7 +34,7 @@ class CreateAccountController extends User
 
         if (count($checkIfUserExist) > 0){
             $msg="This user already exist";
-            Template::redirectTo("/auth/register" ,$msg);
+            Template::redirectTo("/auth/create_account" ,$msg);
         }else{
             $newUser = new User();
             $newUser->setName(Sanitaze::sanitazeInput($_POST['name']));
@@ -45,10 +45,10 @@ class CreateAccountController extends User
             if ($newUser->save($newUser) == null){
                 Template::redirectTo("/auth/login","","Account created successfully");
             }else{
-                Template::redirectTo("/auth/register","Something went wrong");
+                Template::redirectTo("/auth/create_account","Something went wrong");
             }
         }
-        Template::redirectTo("/auth/register");
+        Template::redirectTo("/auth/create_account");
 
     }
 

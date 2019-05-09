@@ -33,7 +33,7 @@ class LoginController extends User
             $_SESSION['user'] = $checkIfUserExist;
             unset($_SESSION["user"][0]["password"]);
             unset($_SESSION["user"][0][4]);
-            Template::redirectTo('/');
+            Template::redirectTo('/guestBook');
         } elseif (count($checkIfUserExist) > 0 && !$user->verifyPasswords($_POST["password"], $checkIfUserExist[0]['password'])) {
 
             $this->updateLoginAttempts($checkIfUserExist[0]['email'], true,intval($checkIfUserExist[0]['failed_attempts']));
@@ -59,5 +59,10 @@ class LoginController extends User
             $errors[] = ["field" => "password", "error" => "Password is at least 8 characters."];
         }
         return $errors;
+    }
+
+    public function logout(){
+        Session::logout();
+        Template::redirectTo('/auth/login');
     }
 }
