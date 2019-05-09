@@ -77,7 +77,6 @@
 .date-event{
     font-size: 21px;
     text-transform: uppercase;
-    margin-top: 45px;
     display: block;
     text-align: right;
     color: #969caa;
@@ -88,4 +87,14 @@
     -webkit-transform: rotate(-160deg);
     -moz-transform: rotate(-160deg);
     margin-top: 50px;
+}
+.btn-primary-radius{
+	    float: right;
+    background: #f1a1bc;
+    border: 0;
+    border-radius: 20px;
+    padding: 12px 39px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 18px;
+    margin-top: 55px;
 }

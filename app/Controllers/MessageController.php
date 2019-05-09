@@ -13,4 +13,9 @@ class MessageController
     {
         Template::render_php('home.php',array());
     }
+
+    public function showMessageList()
+    {
+        Template::render_php('messages.php');
+    }
 }

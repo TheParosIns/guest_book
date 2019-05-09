@@ -48,7 +48,8 @@ if (Session::isUserLogged()){
                 }
                 elseif ($action == "view") {
                     idParameterExists();
-                    echo "Show message and all it's replies.";
+                    $message = new MessageController();
+                    $message->showMessageList();
                 }
                 elseif ($action == "delete") {
                     idParameterExists();

@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 
-    <link rel="stylesheet" href="main-style.css">
+    <link rel="stylesheet" href="../../assets/main-style.css">
 
     <script src="https://code.jquery.com/jquery-3.1.1.js"
 

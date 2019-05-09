@@ -35,7 +35,7 @@
     <div class="col-md-10" style="margin-left: 135px;">
         <h2 class="header-home">The Guest book</h2>
         <div class="row">
-            <p class="paragraph-home">Where so glad that you came and we'd love for you to sign your name.Perhaps you were until a line or two,why which we can forever remember you.</p>
+            <p class="paragraph-home">Where so glad that you came and wed love for you to sign your name.Perhaps you were until a line or two,why which we can forever remember you.</p>
         </div>
         <div class="row">
             <p class="paragraph-home">After our wedding day has passed our memories will always last.For when we look we'll be sure to see loving words from our friends and family.</p>
@@ -51,10 +51,10 @@
             <div class="pull-right">
                 <h3 class="label-name">Lestie and Michael</h3>
                 <span class="date-event">August 4.2012</span>
+                <a href="<?php echo Template::redirectTo('/guestBook/message/new')?>" class="btn btn-primary btn-primary-radius">Leave a message for us!</a>
             </div>
         </div>
     </div>
-
 </div>
 
 </body>

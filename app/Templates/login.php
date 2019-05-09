@@ -45,7 +45,7 @@
         }
     }
     ?>
-    <form class="form-signin" method="POST" action="login/send">
+    <form class="form-signin" method="POST" action="<?php echo Template::redirectTo('/auth/login/send') ?>">
         <h2 class="form-signin-heading">Please Login</h2>
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">@</span>
@@ -54,7 +54,7 @@
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-primary btn-block" name="form-login" type="submit">Login</button>
-        <a class="btn btn-lg btn-primary btn-block" href="register">Create Account</a>
+        <a class="btn btn-lg btn-primary btn-block" href="<?php echo Template::redirectTo('/auth/register/send') ?>">Create Account</a>
     </form>
 </div>
 </body>
