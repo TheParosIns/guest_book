@@ -59,8 +59,10 @@ class MessageRepository
     {
         try {
             $pdo = BaseConfig::connect();
-            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  m.is_deleted = 0 and m.id=$idMessage ;";
+            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  m.is_deleted = 0 and m.id= :id ;";
             $stmt = $pdo->prepare($sql);
+            $id = filter_input(INPUT_GET, $idMessage, FILTER_SANITIZE_NUMBER_INT);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $data = $stmt->fetchAll();
             return $data;
