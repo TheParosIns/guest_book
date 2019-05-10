@@ -65,7 +65,7 @@
         <form class="form-control-guest left" method="POST" >
             <div class="input-group">
                 <label for="address" class="label-guest">Message</label>
-                <textarea rows="5" class="input-control-guest" id="message" cols="50" name="message">
+                <textarea readonly rows="5" class="input-control-guest" id="message" cols="50" name="message">
                     <?php echo $arguments[0]['message'] ?>
                 </textarea>
             </div>

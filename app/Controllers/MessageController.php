@@ -53,7 +53,6 @@ class MessageController
     {
         $message = new Message();
         $editMessage = $message->getMessageById($idMessage);
-        var_dump($editMessage);
         if ($message->checkIfUserHasCreatedThisMessage($editMessage[0]['user_id'])) {
 
             Template::render_php('guestBook/edit.php', $editMessage);
@@ -69,17 +68,18 @@ class MessageController
         }
         $message = new Message();
         $message->setMessage(Sanitaze::sanitazeInput($_POST["message"]));
-        if ($message->update($message, $idMessage)['error']) {
+        if ($message->update($message->getMessage(), $idMessage) == null) {
+            Template::redirectTo('/guestBook/message/view', '', 'Message updated successfully');
+        }else{
             Template::redirectTo('/guestBook/edit/' . $idMessage,"Something went wrong");
         }
-        Template::redirectTo('/guestBook/message/viewMessage', '', 'Message updated successfully');
+
     }
 
     public function viewMessage($idMessage)
     {
         $message = new Message();
         $message = $message->getMessageById($idMessage);
-        var_dump($message);
         Template::render_php('guestBook/viewMessage.php',$message);
     }
 

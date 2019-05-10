@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="guest_book@localhost" uuid="f460b2c4-8d7c-4a59-97b6-4a85c2541328">
-      <database-info product="MySQL" version="5.7.26-0ubuntu0.16.04.1-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.47 ( Revision: fe1903b1ecb4a96a917f7ed3190d80c049b1de29 )">
+    <data-source name="MySQL - sj-performance@localhost" uuid="ab8164ca-10c3-4e95-820d-65cc0f25e5c2">
+      <database-info product="MySQL" version="5.7.23-0ubuntu0.18.04.1" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.47 ( Revision: fe1903b1ecb4a96a917f7ed3190d80c049b1de29 )" family="MYSQL" exact-version="5.7.23">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
-      <user-name>root</user-name>
-      <introspection-schemas>*:guest_book</introspection-schemas>
+      <secret-storage>master_key</secret-storage>
+      <user-name>phpmyadmin</user-name>
+      <introspection-schemas>*:@,guest_book</introspection-schemas>
     </data-source>
   </component>
 </project>

@@ -27,7 +27,7 @@ class MessageRepository
     public function getAllMessages(){
         try {
             $pdo = BaseConfig::connect();
-            // the main query
+
             $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE m.is_deleted = 0 ";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
@@ -41,8 +41,8 @@ class MessageRepository
     public function getMessageById($idMessage){
         try {
             $pdo = BaseConfig::connect();
-            // the main query
-            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  `m.is_deleted` = 0 and `m.id`=$idMessage ";
+
+            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  m.is_deleted = 0 and m.id=$idMessage ";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $data = $stmt->fetchAll();
@@ -56,11 +56,8 @@ class MessageRepository
 
         try {
             $pdo = BaseConfig::connect();
-            // the main query
-            $params = [':message' => $message->getMessage(), ':idMessage' => $idMessage];
-            $sql = "UPDATE message SET message= :message  WHERE `id`= :idMessage ";
-            $sqlReady = BaseConfig::build_pdo_query($sql, $params);
-            $stmt = $pdo->prepare($sqlReady);
+            $sql = "UPDATE message SET message= '$message'WHERE id= '$idMessage' ";
+            $stmt = $pdo->prepare($sql);
             $stmt->execute();
 
         } catch (PDOException $e) {
