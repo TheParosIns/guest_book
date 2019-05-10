@@ -15,8 +15,9 @@ class UserRepository
         try {
             $pdo = BaseConfig::connect();
             // the main query
-            $sql = "SELECT * FROM users WHERE email= '$email' LIMIT 1";
+            $sql = "SELECT * FROM users WHERE email= :email LIMIT 1";
             $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->execute();
             $data = $stmt->fetchAll();
             return $data;
@@ -30,10 +31,14 @@ class UserRepository
         try {
             $pdo = BaseConfig::connect();
             $query = "INSERT INTO `users` (`id`, `name`, `surname`, `email`, `password`, `created_at`) 
-                  VALUES (NULL, '" . $user->getName() . "','" . $user->getSurname() . "', '" . $user->getEmail() . "', '" . $user->getPassword() . "','" . $user->getCreatedAt() . "')";
-
-            $statement = $pdo->prepare($query);
-            $statement->execute();
+                  VALUES (NULL, :name, :surname, :email,:password , :createdAt)";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':name', $user->getName(), PDO::PARAM_STR);
+            $stmt->bindParam(':surname', $user->getSurname(), PDO::PARAM_STR);
+            $stmt->bindParam(':email',  $user->getEmail(), PDO::PARAM_STR);
+            $stmt->bindParam(':password',   $user->getPassword(), PDO::PARAM_STR);
+            $stmt->bindParam(':createdAt',   $user->getCreatedAt(), PDO::PARAM_STR);
+            $stmt->execute();
             $_SESSION["last_id_user"] = $pdo->lastInsertId();
         } catch (PDOException $e) {
             return ["error" => true, "msg" => "Insert failed because " . $e->getMessage()];
@@ -47,8 +52,10 @@ class UserRepository
             $pdo = BaseConfig::connect();
             $id = $_SESSION['last_id_user'];
             // the main query
-            $sql = "UPDATE users SET password= '$newHashPassword'WHERE id= '$id' ";
+            $sql = "UPDATE users SET password= :newHashPassword WHERE id= :id ";
             $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':newHashPassword', $newHashPassword, PDO::PARAM_STR);
             $stmt->execute();
 
         } catch (PDOException $e) {

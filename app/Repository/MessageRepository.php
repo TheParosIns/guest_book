@@ -14,14 +14,16 @@ class MessageRepository
 
         try {
             $pdo = BaseConfig::connect();
-            $query = "INSERT INTO `message` (`id`, `message`, `user_id`, `created_at`, `is_deleted`) 
-                  VALUES (NULL, '" . $message->getMessage() . "','" . $message->getUserID() . "','" . $message->getCreatedAt() . "',0)";
-            $statement = $pdo->prepare($query);
-            $statement->execute();
+            $sql = "INSERT INTO `message` (`id`, `message`, `user_id`, `created_at`, `is_deleted`) 
+                  VALUES (NULL, :message , :userId, :createdAt ,0)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':message', $message->getMessage(), PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $message->getUserID(), PDO::PARAM_INT);
+            $stmt->bindParam(':createdAt', $message->getCreatedAt(), PDO::PARAM_STR);
+            $stmt->execute();
         } catch (PDOException $e) {
             return ["error" => true, "msg" => "Insert failed because " . $e->getMessage()];
         }
-
     }
 
 
@@ -31,9 +33,13 @@ class MessageRepository
         try {
             $pdo = BaseConfig::connect();
             $query = "INSERT INTO `reply` (`id`, `message_id`, `user_id`, `created_at`, `reply`) 
-                  VALUES (NULL, '" . $reply->getMessageId() . "','" . $reply->getUserID() . "','" . $reply->getCreatedAt() . "','" . $reply->getReply() . "')";
-            $statement = $pdo->prepare($query);
-            $statement->execute();
+                  VALUES (NULL, :idMessage ,:userId ,:createdAt ,:reply)";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':idMessage', $reply->getMessageId(), PDO::PARAM_INT);
+            $stmt->bindParam(':userId', $reply->getUserID(), PDO::PARAM_INT);
+            $stmt->bindParam(':createdAt', $reply->getCreatedAt(), PDO::PARAM_STR);
+            $stmt->bindParam(':reply', $reply->getReply(), PDO::PARAM_STR);
+            $stmt->execute();
         } catch (PDOException $e) {
             return ["error" => true, "msg" => "Insert reply failed because " . $e->getMessage()];
         }
@@ -59,9 +65,9 @@ class MessageRepository
     {
         try {
             $pdo = BaseConfig::connect();
-            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  m.is_deleted = 0 and m.id= :id ";
+            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  m.is_deleted = 0 and m.id= :idMessage ";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':id', $idMessage, PDO::PARAM_INT);
+            $stmt->bindParam(':idMessage', $idMessage, PDO::PARAM_INT);
             $stmt->execute();
             $data = $stmt->fetchAll();
             return $data;
@@ -91,8 +97,10 @@ class MessageRepository
 
         try {
             $pdo = BaseConfig::connect();
-            $sql = "UPDATE message SET message= '$message'WHERE id= '$idMessage' ";
+            $sql = "UPDATE message SET message= :message WHERE id= :idMessage ";
             $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':idMessage', $idMessage, PDO::PARAM_INT);
+            $stmt->bindParam(':message', $message, PDO::PARAM_STR);
             $stmt->execute();
 
         } catch (PDOException $e) {
@@ -104,8 +112,9 @@ class MessageRepository
     {
         try {
             $pdo = BaseConfig::connect();
-            $sql = "UPDATE message SET is_deleted = 1 WHERE `id` = $idMessage  ";
+            $sql = "UPDATE message SET is_deleted = 1 WHERE id= :idMessage  ";
             $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':idMessage', $idMessage, PDO::PARAM_INT);
             $stmt->execute();
 
         } catch (PDOException $e) {
