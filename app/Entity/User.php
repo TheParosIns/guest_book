@@ -197,7 +197,7 @@ class User extends UserRepository
             $remain=$remaining_delay%86400;
             $remain=$remain%3600;
             $secs=$remain%60;
-            return ["error" => true, "msg" => "You should wait ".(int)$secs." to make another request"];
+            return ["error" => true, "msg" => "You should wait ".$secs*(-1)." secs to make another request"];
         } return ["error" => false, "msg" => "Try again"];
     }
 }
