@@ -53,8 +53,8 @@ class MessageController
     public function editMessageForm($idMessage)
     {
         $message = new Message();
-        $editMessage = $message->getMessageById($idMessage);
-        if ($message->checkIfUserHasCreatedThisMessage($editMessage[0]['user_id'])) {
+        $editMessage = $message->getMessageById(Sanitaze::sanitazeInput(($idMessage)));
+        if ($message->checkIfUserHasRights($editMessage[0]['user_id'])) {
 
             Template::render_php('guestBook/edit.php', $editMessage);
         }
@@ -69,7 +69,7 @@ class MessageController
         }
         $message = new Message();
         $message->setMessage(Sanitaze::sanitazeInput($_POST["message"]));
-        if ($message->update($message->getMessage(), $idMessage) == null) {
+        if ($message->update($message->getMessage(), Sanitaze::sanitazeInput($idMessage)) == null) {
             Template::redirectTo('/guestBook/message/view', '', 'Message updated successfully');
         } else {
             Template::redirectTo('/guestBook/edit/' . $idMessage, "Something went wrong");
@@ -82,8 +82,8 @@ class MessageController
     {
         $message = new Message();
         $messageData = [];
-        $getMessage = $message->getMessageById($idMessage);
-        $messageReplies = $message->getMessageReplies($idMessage);
+        $getMessage = $message->getMessageById(Sanitaze::sanitazeInput($idMessage));
+        $messageReplies = $message->getMessageReplies(Sanitaze::sanitazeInput($idMessage));
         $messageData['message'] = $getMessage;
         $messageData['replies'] = $messageReplies;
         Template::render_php('guestBook/viewMessage.php', $messageData);
@@ -93,9 +93,9 @@ class MessageController
     public function deleteMessage($idMessage)
     {
         $message = new Message();
-        $getMessage = $message->getMessageById($idMessage);
-        if ($message->checkIfUserHasCreatedThisMessage($getMessage[0]['user_id'])) {
-            $deleteMessage = $message->delete($idMessage);
+        $getMessage = $message->getMessageById(Sanitaze::sanitazeInput($idMessage));
+        if ($message->checkIfUserHasRights($getMessage[0]['user_id'])) {
+            $deleteMessage = $message->delete(Sanitaze::sanitazeInput($idMessage));
             if ($deleteMessage == null) {
                 Template::redirectTo('/guestBook/message/view', '', 'Message deleted successfully');
             }
@@ -111,8 +111,8 @@ class MessageController
             Template::redirectTo('/guestBook/message/viewMessage/' . $idMessage, 'If you want to reply to this message, you have to type something :) ');
         }
         $message = new Message();
-        $getMessage = $message->getMessageById($idMessage);
-        if ($message->checkIfUserHasCreatedThisMessage($getMessage[0]['user_id'])) {
+        $getMessage = $message->getMessageById(Sanitaze::sanitazeInput($idMessage));
+        if ($message->checkIfUserHasRights($getMessage[0]['user_id'])) {
             Template::redirectTo('/guestBook/message/viewMessage/' . $idMessage, "You can not reply your own messages!!");
         }
         $reply = new Reply();

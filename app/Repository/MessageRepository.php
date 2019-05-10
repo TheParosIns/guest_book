@@ -59,10 +59,9 @@ class MessageRepository
     {
         try {
             $pdo = BaseConfig::connect();
-            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  m.is_deleted = 0 and m.id= :id ;";
+            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE  m.is_deleted = 0 and m.id= :id ";
             $stmt = $pdo->prepare($sql);
-            $id = filter_input(INPUT_GET, $idMessage, FILTER_SANITIZE_NUMBER_INT);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $idMessage, PDO::PARAM_INT);
             $stmt->execute();
             $data = $stmt->fetchAll();
             return $data;
@@ -76,8 +75,9 @@ class MessageRepository
         try {
 
             $pdo = BaseConfig::connect();
-            $sql = "SELECT r.*,u.name,u.surname FROM reply r LEFT JOIN message m  ON r.message_id = m.id LEFT JOIN users u ON r.user_id = u.id WHERE m.is_deleted = 0 AND r.message_id = $idMessage ORDER BY r.created_at; ";
+            $sql = "SELECT r.*,u.name,u.surname FROM reply r LEFT JOIN message m  ON r.message_id = m.id LEFT JOIN users u ON r.user_id = u.id WHERE m.is_deleted = 0 AND r.message_id = :idMessage ORDER BY r.created_at; ";
             $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':idMessage', $idMessage, PDO::PARAM_INT);
             $stmt->execute();
             $data = $stmt->fetchAll();
             return $data;

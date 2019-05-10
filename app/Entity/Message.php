@@ -100,7 +100,7 @@ class Message extends MessageRepository
         $this->created_at = $created_at;
     }
 
-    public function checkIfUserHasCreatedThisMessage($id){
+    public function checkIfUserHasRights($id){
         return $id == $_SESSION['user'][0]['id'] ? true : false;
     }
 
