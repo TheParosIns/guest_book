@@ -62,7 +62,7 @@
     ?>
     <div class="col-md-10" style="margin-left: 135px;">
         <h2 class="header-container-guest">Guest Book Template</h2>
-        <form class="form-control-guest left" method="POST" action="/guestBook/message/update">
+        <form class="form-control-guest left" method="POST" action="/guestBook/message/update/<?php echo $arguments[0]['id'] ?>">
             <div class="input-group">
                 <label for="address" class="label-guest">Message</label>
                 <textarea rows="5" class="input-control-guest" id="message" cols="50" name="message">

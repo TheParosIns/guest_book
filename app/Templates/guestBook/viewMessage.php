@@ -62,22 +62,35 @@
     ?>
     <div class="col-md-10" style="margin-left: 135px;">
         <h2 class="header-container-guest">Guest Book Template</h2>
-        <form class="form-control-guest left" method="POST" >
+        <form class="form-control-guest left" method="POST" novalidate>
             <div class="input-group">
                 <label for="address" class="label-guest">Message</label>
-                <textarea rows="5" class="input-control-guest" id="message" cols="50" name="message">
-                    <?php echo $arguments[0]['message'] ?>
+                <textarea readonly rows="5" class="input-control-guest" id="message" cols="50" name="message">
+                    <?php echo $arguments['message'][0]['message'] ?>
                 </textarea>
             </div>
         </form>
-<!--        TODO CHECK IF THIS MESSAGE HAS REPLYS-->
-<!--        TODO CREATE THE FORM FOR REPLY MESSAGES-->
-        <form class="form-control-guest left" method="POST">
+
+        <?php if (!empty($arguments['replies'])) : ?>
+        <div>Replies By:</div>
+            <?php foreach ($arguments['replies'] as $reply) : ?>
+                <form class="form-control-guest left" method="POST">
+                    <div class="input-group">
+                        <label for="address" class="label-guest"><?php echo $reply['name']." ".$reply['surname'] ?></label>
+                        <textarea readonly rows="5" class="input-control-guest" id="message" cols="50" name="reply">
+                            <?php echo $reply['reply'] ?>
+                        </textarea>
+                    </div>
+                </form>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        <form class="form-control-guest left" method="POST" action="/guestBook/reply/<?php echo $arguments['message'][0]['id'] ?>"
+              novalidate>
             <div class="input-group">
                 <label for="address" class="label-guest">Reply:</label>
-                <textarea rows="5" class="input-control-guest" id="message" cols="50" name="message"></textarea>
+                <textarea rows="5" class="input-control-guest" id="message" cols="50" name="reply"></textarea>
             </div>
-            <a  class="btn btn-primary btn-primary-radius">Reply</a>
+            <button type="submit" class="btn btn-primary btn-primary-radius">Reply</button>
         </form>
     </div>
 </div>
