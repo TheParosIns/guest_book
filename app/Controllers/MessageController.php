@@ -9,6 +9,7 @@
 require_once(__DIR__ . '/../Entity/Message.php');
 require_once(__DIR__ . '/../Repository/MessageRepository.php');
 require_once(__DIR__ . '/../Entity/Message.php');
+require_once(__DIR__ . '/../Entity/Reply.php');
 
 class MessageController
 {
@@ -70,18 +71,62 @@ class MessageController
         $message->setMessage(Sanitaze::sanitazeInput($_POST["message"]));
         if ($message->update($message->getMessage(), $idMessage) == null) {
             Template::redirectTo('/guestBook/message/view', '', 'Message updated successfully');
-        }else{
-            Template::redirectTo('/guestBook/edit/' . $idMessage,"Something went wrong");
+        } else {
+            Template::redirectTo('/guestBook/edit/' . $idMessage, "Something went wrong");
         }
 
     }
 
+
     public function viewMessage($idMessage)
     {
         $message = new Message();
-        $message = $message->getMessageById($idMessage);
-        Template::render_php('guestBook/viewMessage.php',$message);
+        $messageData = [];
+        $getMessage = $message->getMessageById($idMessage);
+        $messageReplies = $message->getMessageReplies($idMessage);
+        $messageData['message'] = $getMessage;
+        $messageData['replies'] = $messageReplies;
+        Template::render_php('guestBook/viewMessage.php', $messageData);
     }
+
+
+    public function deleteMessage($idMessage)
+    {
+        $message = new Message();
+        $getMessage = $message->getMessageById($idMessage);
+        if ($message->checkIfUserHasCreatedThisMessage($getMessage[0]['user_id'])) {
+            $deleteMessage = $message->delete($idMessage);
+            if ($deleteMessage == null) {
+                Template::redirectTo('/guestBook/message/view', '', 'Message deleted successfully');
+            }
+        }
+        Template::redirectTo('/guestBook/message/view', 'You can delete only the messages you have created!!');
+    }
+
+    public function replyMessage($idMessage)
+    {
+
+        $reply = filter_var($_POST["reply"], FILTER_SANITIZE_STRING);
+        if (isset($reply) && $reply == null && $reply == "") {
+            Template::redirectTo('/guestBook/message/viewMessage/' . $idMessage, 'If you want to reply to this message, you have to type something :) ');
+        }
+        $message = new Message();
+        $getMessage = $message->getMessageById($idMessage);
+        if ($message->checkIfUserHasCreatedThisMessage($getMessage[0]['user_id'])) {
+            Template::redirectTo('/guestBook/message/viewMessage/' . $idMessage, "You can not reply your own messages!!");
+        }
+        $reply = new Reply();
+        $reply->setMessageId($idMessage);
+        $reply->setReply(Sanitaze::sanitazeInput($_POST['reply']));
+        $reply->setUserId($_SESSION['user'][0]['id']);
+        $reply->setCreatedAt(date('Y-m-d H:i:s'));
+        if ($reply->saveReply($reply) == null) {
+            Template::redirectTo('/guestBook/message/viewMessage/' . $idMessage, '', 'Thank you for your reply');
+        } else {
+            Template::redirectTo('/guestBook/message/viewMessage/' . $idMessage, 'Something went wrong');
+        }
+    }
+
 
     public function validateDatas()
     {

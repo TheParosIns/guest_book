@@ -12,6 +12,7 @@ $module = isset($uriExploded[1]) ? $uriExploded[1] : "";
 $controller = isset($uriExploded[2]) ? $uriExploded[2] : "";
 $action = isset($uriExploded[3]) ? $uriExploded[3] : "";
 $idParameter = isset($uriExploded[4]) ? $uriExploded[4] : "";
+$idMessage = $action;
 
 //Routes
 // / GET  Show landing page.
@@ -61,14 +62,16 @@ if (Session::isUserLogged()){
                 }
                 elseif ($action == "delete") {
                     idParameterExists();
-                    echo "Delete message.";
+                    $message = new MessageController();
+                    $message->deleteMessage($idParameter);
                 }
                 else {
                     returnErrorPage(404);
                 }
             } elseif ($controller == "reply") {
                 if (idParameterExists()) {
-                    echo "Submit a new reply for a given message.";
+                    $message = new MessageController();
+                    $message->replyMessage($idMessage);
                 } else {
                     returnErrorPage(404);
                 }

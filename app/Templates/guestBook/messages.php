@@ -74,7 +74,7 @@
                 </div>
                 <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/viewMessage/<?php echo $message['id']; ?>">View</a>
                 <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/edit/<?php echo $message['id']; ?>">Edit</a>
-                <a  class="btn btn-primary btn-primary-radius">Delete</a>
+                <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/delete/<?php echo $message['id']; ?>">Delete</a>
             </form>
         <?php } ?>
     </div>

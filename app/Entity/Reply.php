@@ -6,7 +6,9 @@
  * Time: 10.10.MD
  */
 
-class Reply
+require_once (__DIR__.'/../Repository/MessageRepository.php');
+
+class Reply extends MessageRepository
 {
 
     protected $id;
@@ -16,6 +18,8 @@ class Reply
     protected $user_id;
 
     protected $reply;
+
+    protected $created_at;
 
     /**
      * @return mixed
@@ -80,6 +84,24 @@ class Reply
     {
         $this->reply = $reply;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param mixed $created_at
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+
 
 
 }
