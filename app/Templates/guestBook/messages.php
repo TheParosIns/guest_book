@@ -30,9 +30,10 @@
 
 </head>
 
-<body>
+<body class="msg-container">
 <?php include('menu.php') ?>
-<div class="container bg-flower">
+<div class="container container-content">
+<div class="container">
     <?php
     if (isset($_SESSION['error'])) {
         ?>
@@ -60,31 +61,32 @@
         }
     }
     ?>
-    <div class="col-md-10" style="margin-left: 135px;">
-        <h2 class="header-container-guest">Guest Book Template</h2>
+    <div class="col-md-12" style="margin:20px;">
         <?php if (!empty($arguments)) { ?>
             <?php
             foreach ($arguments as $message) {
                 ?>
                 <form class="form-control-guest left">
+                    <i class="fa fa-comments" aria-hidden="true"></i>
                     <div class="input-group">
                         <label for="message" class="label-guest">Message by <?php echo $message['name'] . ' ' . $message['surname'] ?></label>
-                        <textarea rows="5" class="input-control-guest" id="message" cols="50" name="message">
-                        <?php echo $message['message']; ?>
-                    </textarea>
+                        <textarea rows="5" class="input-control-guest" id="message" cols="50" name="message"><?php echo $message['message']; ?></textarea>
                     </div>
-                    <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/viewMessage/<?php echo $message['id']; ?>">View</a>
-                    <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/edit/<?php echo $message['id']; ?>">Edit</a>
-                    <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/delete/<?php echo $message['id']; ?>">Delete</a>
+                    <div class="group-btn">
+                        <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/viewMessage/<?php echo $message['id']; ?>">View</a>
+                        <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/edit/<?php echo $message['id']; ?>">Edit</a>
+                        <a  class="btn btn-primary btn-primary-radius" href="/guestBook/message/delete/<?php echo $message['id']; ?>">Delete</a>
+                    </div>
                 </form>
             <?php } ?>
             <?php } else{ ?>
-            <div class="input-group">
+            <div class="input-group no-message-template">
                 <label for="address" class="label-guest">  You can be the first to</label>
                 <a href="/guestBook/message/create" class="btn btn-primary btn-primary-radius">Leave a message for us!</a>
             </div>
         <?php }?>
     </div>
 </div>
+
 </body>
 </html>

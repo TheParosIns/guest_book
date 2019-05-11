@@ -51,7 +51,7 @@ class MessageRepository
         try {
             $pdo = BaseConfig::connect();
 
-            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE m.is_deleted = 0 ";
+            $sql = "SELECT m.* ,u.name,u.surname FROM message m LEFT JOIN users u  ON u.id = m.user_id WHERE m.is_deleted = 0 ORDER BY m.created_at DESC ";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $data = $stmt->fetchAll();

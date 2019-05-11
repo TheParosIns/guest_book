@@ -38,17 +38,6 @@
     text-transform: uppercase;
 }
 
-/*style of home*/
-/*.bg-home{
-	background: url(bg-home2.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-height: 100vh;
-    background-position: 50% 50%;
-    overflow: hidden;
-    height: 100vh;
-    padding: 27px 0;
-}*/
 .header-home{
        font-family: 'Indie Flower', cursive;
     font-size: 82px;
@@ -137,4 +126,97 @@ li a:hover:not(.active) {
 li a.active {
     color: white;
     background-color: #f1a1bc;
+}
+.no-message-template label, .no-message-template a{
+    display:inline-block;
+    float:left;
+}
+.no-message-template {
+    margin: 24% auto 0 auto;
+}
+.no-message-template a{
+    margin-top:0 !important;
+    margin-right:0 !important;
+}
+.primary-menu{
+    padding:0;
+}
+.logout-link{
+    background: #c7b87a;
+}
+.logout-link a{
+    color:#ffffff;
+}
+.alert.alert-success,.alert.alert-danger{
+    background: #fff;
+    max-width: 911px;
+    margin: 0 auto;
+    height: 50px;
+    font-weight: bold;
+    opacity: 0.7;
+}
+/*body.msg-container{*/
+    /*background: url(bg-flower.png);*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: cover;*/
+    /*background-position: 50% 50%;*/
+/*}*/
+body.msg-container .label-guest{
+    font-size: 15px;
+    font-weight: bold;
+    display:block;
+    width:100%;
+    padding: 0;
+}
+body.msg-container .input-control-guest{
+    background: transparent;
+    display: block;
+    max-width: 500px;
+    min-width: 500px;
+    width: 500px;
+    float: left;
+    text-align: left;
+}
+.group-btn{
+    display: block;
+    float: right;
+    width: 308px;
+}
+.group-btn .btn-primary-radius{
+    margin: 20px 5px;
+    padding: 7px 21px;
+}
+.msg-container .form-control-guest{
+    padding: 49px 0 12px 0;
+    border-bottom: 1px solid #fed8d1;
+    float: left;
+    width: 96%;
+}
+.container-content{
+    border: 1px solid #f9f0ca;
+    padding: 0;
+    border-top: 0;
+}
+.fa-comments,.fa-reply-all{
+    font-weight: 900;
+    font-size: 39px;
+    display: inline-block;
+    color: #c7b87a;
+    float: left;
+    margin-right: 35px;
+}
+.msg-container .form-control-guest.reply-comment{
+    float: right;
+    width: 70%;
+    margin-right:35px;
+}
+.form-control-guest.reply-comment.pull-right .input-control-guest{
+    width: 100%;
+    border: 1px solid #f1f1f1;
+    max-width: 100%;
+    box-shadow: 5px 10px 18px #c1c1c1;
+}
+.reply-comments{
+    margin-bottom: 70px;
+    margin-top: 94px;
 }

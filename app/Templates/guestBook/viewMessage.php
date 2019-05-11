@@ -30,9 +30,10 @@
 
 </head>
 
-<body>
+<body class="msg-container">
 <?php include('menu.php') ?>
-<div class="container bg-flower">
+<div class="container container-content">
+    <div class="container">
     <?php
     if (isset($_SESSION['error'])) {
         ?>
@@ -60,37 +61,33 @@
         }
     }
     ?>
-    <div class="col-md-10" style="margin-left: 135px;">
-        <h2 class="header-container-guest">Guest Book Template</h2>
+        <div class="col-md-12" style="margin:20px;">
         <form class="form-control-guest left" method="POST" novalidate>
             <div class="input-group">
                 <label for="address" class="label-guest">Message</label>
-                <textarea readonly rows="5" class="input-control-guest" id="message" cols="50" name="message">
-                    <?php echo $arguments['message'][0]['message'] ?>
-                </textarea>
+                <textarea readonly rows="5" class="input-control-guest" id="message" cols="50" name="message"><?php echo $arguments['message'][0]['message'] ?></textarea>
             </div>
         </form>
 
         <?php if (!empty($arguments['replies'])) : ?>
-        <div>Replies By:</div>
+            <label for="message" class="label-guest" style="margin-top:27px">Replies By</label>
             <?php foreach ($arguments['replies'] as $reply) : ?>
-                <form class="form-control-guest left" method="POST">
+                <form class="form-control-guest reply-comment" method="POST">
+                    <i class="fa fa-comments" aria-hidden="true"></i>
                     <div class="input-group">
                         <label for="address" class="label-guest"><?php echo $reply['name']." ".$reply['surname'] ?></label>
-                        <textarea readonly rows="5" class="input-control-guest" id="message" cols="50" name="reply">
-                            <?php echo $reply['reply'] ?>
-                        </textarea>
+                        <textarea readonly rows="5" class="input-control-guest" id="message" cols="50" name="reply"><?php echo $reply['reply'] ?></textarea>
                     </div>
                 </form>
                 <?php endforeach; ?>
             <?php endif; ?>
-        <form class="form-control-guest left" method="POST" action="/guestBook/reply/<?php echo $arguments['message'][0]['id'] ?>"
-              novalidate>
-            <div class="input-group">
-                <label for="address" class="label-guest">Reply:</label>
-                <textarea rows="5" class="input-control-guest" id="message" cols="50" name="reply"></textarea>
+        <form class="form-control-guest reply-comment pull-right" method="POST" action="/guestBook/reply/<?php echo $arguments['message'][0]['id'] ?>"
+              novalidate style="margin-right:20px;">
+            <div class="input-group" style="width: 100%;">
+                <i class="fa fa-reply-all" aria-hidden="true"></i> <label for="address" class="label-guest" style="display: inline-block;float: left;width: auto;">Reply:</label>
+                <textarea rows="5" class="input-control-guest" id="message" cols="50" name="reply" style="width: 100%;max-width: 100%"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary btn-primary-radius">Reply</button>
+            <button type="submit" class="btn btn-primary btn-primary-radius reply-comments">Reply</button>
         </form>
     </div>
 </div>
