@@ -1,4 +1,5 @@
-FROM php:7.2-fpm
+FROM phpdockerio/php72-fpm:latest
+WORKDIR "/application"
 
 # Install PHP extensions and PECL modules.
 RUN buildDeps=" \
@@ -30,7 +31,3 @@ RUN buildDeps=" \
     && docker-php-ext-enable memcached.so redis.so \
     && apt-get purge -y --auto-remove $buildDeps \
     && rm -r /var/lib/apt/lists/*
-
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
-RUN apt-get install --yes nodejs
-RUN npm i -g nodemon
